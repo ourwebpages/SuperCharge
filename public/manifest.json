@@ -1,0 +1,16 @@
+{
+  "name": "SuperCharge — Interactive 3D Studio",
+  "short_name": "SuperCharge",
+  "description": "Crafting immersive digital experiences using real-time 3D, motion design, and thoughtful engineering.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

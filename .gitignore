@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Freebuff internal tooling
+.freebuff/
+
+# Large 3D model files (download separately)
+public/models/*.glb
+public/models/*.obj
+public/models/*.mtl
