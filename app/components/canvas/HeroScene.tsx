@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
@@ -47,6 +47,15 @@ function SceneContent({ scrollProgress, mouseHook }: { scrollProgress: number; m
 export function HeroScene({ scrollProgress }: HeroSceneProps) {
   const mouseHook = useMousePosition();
 
+  // Notify the loading screen when the Canvas finishes initializing.
+  // Uses a global callback set by LoadingScreen to avoid prop drilling.
+  const handleCreated = useCallback(() => {
+    const readyFn = (window as any).__superchargeLoadingReady;
+    if (typeof readyFn === "function") {
+      readyFn();
+    }
+  }, []);
+
   return (
     <div
       style={{
@@ -64,6 +73,7 @@ export function HeroScene({ scrollProgress }: HeroSceneProps) {
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         style={{ width: "100%", height: "100%" }}
+        onCreated={handleCreated}
       >
         <SceneContent scrollProgress={scrollProgress} mouseHook={mouseHook} />
       </Canvas>

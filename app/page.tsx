@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { HeroScene } from "./components/canvas/HeroScene";
 import { HeroOverlay } from "./components/ui/HeroOverlay";
 import { AboutOverlay, WorkOverlay, ServicesOverlay, ContactOverlay } from "./components/ui/SectionOverlay";
 import { Nav } from "./components/ui/Nav";
+import { LoadingScreen } from "./components/ui/LoadingScreen";
 import { ParallaxLayer, GradientOrb } from "./components/ui/ParallaxLayer";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 
@@ -28,16 +29,24 @@ function getActiveSection(progress: number): string {
 export default function Home() {
   const scrollProgress = useScrollProgress();
   const activeSection = useMemo(() => getActiveSection(scrollProgress), [scrollProgress]);
+  const [loaded, setLoaded] = useState(false);
+
+  const handleLoadComplete = useCallback(() => {
+    setLoaded(true);
+  }, []);
 
   return (
     <>
+      {/* Loading screen -- fades out once the 3D scene is ready */}
+      {!loaded && <LoadingScreen onComplete={handleLoadComplete} />}
+
       {/* Fixed 3D canvas behind everything */}
       <HeroScene scrollProgress={scrollProgress} />
 
       {/* Fixed navigation */}
       <Nav activeSection={activeSection} />
 
-      {/* Mid-ground gradient orbs — drift at parallax speed between 3D and content */}
+      {/* Mid-ground gradient orbs -- drift at parallax speed between 3D and content */}
       <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
         <GradientOrb color="#4f46e5" size={600} x="-10%" y="20%" speed={0.3} blur={100} />
         <GradientOrb color="#06b6d4" size={500} x="70%" y="50%" speed={0.5} blur={120} />
@@ -51,14 +60,14 @@ export default function Home() {
           <HeroOverlay activeSection={activeSection} />
         </section>
 
-        {/* About section — content lags slightly behind scroll */}
+        {/* About section */}
         <section id="about" className="relative h-screen flex items-center justify-center">
           <ParallaxLayer speed={0.15} className="w-full flex items-center justify-center">
             <AboutOverlay activeSection={activeSection} />
           </ParallaxLayer>
         </section>
 
-        {/* Work section — deeper parallax */}
+        {/* Work section */}
         <section id="work" className="relative h-screen flex items-center justify-center">
           <ParallaxLayer speed={0.2} className="w-full flex items-center justify-center">
             <WorkOverlay activeSection={activeSection} />
