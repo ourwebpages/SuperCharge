@@ -4,7 +4,6 @@ import { content } from "@/lib/content";
 import { useInView } from "@/hooks/useInView";
 
 interface SectionOverlayProps {
-  id: string;
   activeSection: string;
 }
 
